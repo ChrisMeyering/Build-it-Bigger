@@ -1,5 +1,7 @@
 package com.udacity.gradle.builditbigger.backend;
 
+import com.joker.chris.Joker;
+
 /** The object model for the data we are sending through endpoints */
 public class MyBean {
 
@@ -9,7 +11,7 @@ public class MyBean {
         return myData;
     }
 
-    public void setData(String data) {
-        myData = data;
+    public void setData() {
+        myData = Joker.getRandomJoke();
     }
 }
