@@ -41,6 +41,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'com.android.support:support-v4:27.0.2'
     freeCompile 'com.google.android.gms:play-services-ads:11.6.2'
+    testCompile 'junit:junit:4.12'
     compile project(':javaJokes')
     compile project(':androidjokes')
     compile project(path: ':backend', configuration: 'android-endpoints')

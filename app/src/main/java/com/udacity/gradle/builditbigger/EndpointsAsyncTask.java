@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -23,19 +24,30 @@ import java.io.IOException;
  */
 
 public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
+    public static final String TAG = EndpointsAsyncTask.class.getSimpleName();
     private Context context;
     private ProgressBar progressBar;
     private static MyApi myApi = null;
+    private EndpointsAsyncTaskListener listener = null;
 
+    public interface EndpointsAsyncTaskListener {
+        void onComplete(String joke);
+    }
 
     public EndpointsAsyncTask(Context context, ProgressBar progressBar) {
+        System.out.println("EndpointsAsyncTask constructor");
         this.context = context;
         this.progressBar = progressBar;
+    }
+
+    public void setListner() {
+        this.listener = (EndpointsAsyncTaskListener) context;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
+        System.out.println("onPreExecute");
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
         }
@@ -55,6 +67,7 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
                     });
             myApi = builder.build();
         }
+        System.out.println("doInBackground");
         try {
             return myApi.makeJoke(new MyBean()).execute().getData();
         } catch (IOException e) {
@@ -64,10 +77,22 @@ public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPostExecute(String s) {
+
+        System.out.println("onPostExecute");
         if (progressBar != null) {
             progressBar.setVisibility(View.INVISIBLE);
         }
+        if (listener != null) {
+            listener.onComplete(s);
+        }
         tellJoke(s);
+    }
+
+    @Override
+    protected void onCancelled() {
+        if (listener != null){
+            listener.onComplete(null);
+        }
     }
 
     public void tellJoke(String s) {
