@@ -9,11 +9,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.joker.chris.Joker;
 import com.joker.chris.androidjokes.JokeActivity;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EndpointsAsyncTask.EndpointsAsyncTaskListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void tellJoke(View view) {
         ProgressBar pbLoadingJoke = findViewById(R.id.pb_loading_joke);
-        new EndpointsAsyncTask(this, pbLoadingJoke).execute();
+        new EndpointsAsyncTask(pbLoadingJoke).setListener(this).execute();
     }
 
 
+    @Override
+    public void onComplete(String joke) {
+        Intent intent = new Intent(this, JokeActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, joke);
+        startActivity(intent);
+    }
 }

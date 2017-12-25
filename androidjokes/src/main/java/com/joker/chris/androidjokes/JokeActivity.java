@@ -13,8 +13,11 @@ public class JokeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joke);
-        String joke = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-        ((TextView)findViewById(R.id.tv_joke)).setText(joke);
+        Intent startIntent = getIntent();
+        if (startIntent != null) {
+            String joke = startIntent.getStringExtra(Intent.EXTRA_TEXT);
+            ((TextView) findViewById(R.id.tv_joke)).setText(joke);
+        }
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null)
             actionBar.setDisplayHomeAsUpEnabled(true);
